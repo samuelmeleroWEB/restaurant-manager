@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import bcrypt from 'bcrypt';
+import { hashPassword, comparePassword } from '../utils/auth.js'; // Importamos tus nuevas funciones
 
 const userSchema = new mongoose.Schema({
     email: {
@@ -23,26 +23,28 @@ const userSchema = new mongoose.Schema({
         default: 'camarero'
     }
 }, {
-    timestamps: true // Crea campos createdAt y updatedAt automáticamente
+    timestamps: true
 });
 
-// Middleware para cifrar la contraseña antes de guardar
+// Middleware: Se ejecuta antes de guardar en la DB
 userSchema.pre('save', async function(next) {
-    // Solo cifrar si la contraseña ha sido modificada (o es nueva)
+    // Si la contraseña no ha cambiado, no hacemos nada y seguimos
     if (!this.isModified('password')) return next();
 
     try {
-        const salt = await bcrypt.genSalt(10);
-        this.password = await bcrypt.hash(this.password, salt);
+        // Usamos tu función de utils
+        this.password = await hashPassword(this.password);
         next();
     } catch (error) {
         next(error);
     }
 });
 
-// Método para comparar contraseñas en el login
-userSchema.methods.comparePassword = async function(candidatePassword) {
-    return await bcrypt.compare(candidatePassword, this.password);
+// Método para usar en el Login
+userSchema.methods.verifyPassword = async function(candidatePassword) {
+    // Usamos tu función de utils comparando lo que envía el usuario 
+    // con la contraseña cifrada de este documento (this.password)
+    return await comparePassword(candidatePassword, this.password);
 };
 
 const User = mongoose.model('User', userSchema);
