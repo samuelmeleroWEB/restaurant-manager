@@ -2,7 +2,7 @@ import express from "express"
 import cors from "cors";
 import dotenv from "dotenv";
 import connectDB from "./config/db.config.js"
-
+import authRoutes from './routes/auth.routes.js';
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -16,6 +16,14 @@ app.use(express.json());
 
 // RUTA DE PRUEBA (Health Check)
 app.get("/ping", (req, res) => res.send("Pong! 🏓"));
+
+// REGISTRO
+app.use('/api/auth', authRoutes);
+
+
+
+
+
 
 async function start() {
   try {

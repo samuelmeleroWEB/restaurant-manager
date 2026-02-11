@@ -27,16 +27,17 @@ const userSchema = new mongoose.Schema({
 });
 
 // Middleware: Se ejecuta antes de guardar en la DB
-userSchema.pre('save', async function(next) {
-    // Si la contraseña no ha cambiado, no hacemos nada y seguimos
-    if (!this.isModified('password')) return next();
+userSchema.pre('save', async function() {
+    // Si la contraseña no ha cambiado, no hacemos nada
+    if (!this.isModified('password')) return;
 
     try {
         // Usamos tu función de utils
         this.password = await hashPassword(this.password);
-        next();
+        // NO llamamos a next(), la función async se resuelve sola
     } catch (error) {
-        next(error);
+        // En caso de error, puedes relanzarlo
+        throw error;
     }
 });
 
