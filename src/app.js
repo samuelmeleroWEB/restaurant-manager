@@ -1,21 +1,34 @@
 import express from "express"
 import cors from "cors";
 import dotenv from "dotenv";
-import db from "./config/db.config.js"
+import connectDB from "./config/db.config.js"
 
 dotenv.config();
 const app = express();
-const PORT = process.env.PORT || 4000 
-app.use(cors())
+const PORT = process.env.PORT || 4000;
+
+
+// MIDDLEWARES
+app.use(cors());
 app.use(express.json());
 
+
+
+// RUTA DE PRUEBA (Health Check)
+app.get("/ping", (req, res) => res.send("Pong! 🏓"));
+
 async function start() {
-  await db();
-  app.listen(PORT, () => {
-    console.log(`Servidor escuchando en http://localhost:${PORT}`);
-  });
+  try {
+    await connectDB();
+    app.listen(PORT, () => {
+      console.log(`\n🚀 Servidor listo!`);
+      console.log(`🌐 URL: http://localhost:${PORT}`);
+      console.log(`🔌 DB: Conectada\n`);
+    });
+  } catch (err) {
+    console.error("❌ Error arrancando el servidor:", err);
+    process.exit(1);
+  }
 }
-start().catch((err) => {
-  console.error("Error arrancando el servidor:", err);
-  process.exit(1);
-});
+
+start();
