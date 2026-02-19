@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import connectDB from "./config/db.config.js"
 import authRoutes from './routes/auth.routes.js';
 import productRoutes from './routes/product.routes.js';
+import orderRoutes from './routes/order.routes.js';
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -24,6 +25,8 @@ app.use('/api/auth', authRoutes);
 //Platos
 app.use('/api/products', productRoutes);
 
+//Pedidos
+app.use('/api/orders', orderRoutes);
 
 
 
