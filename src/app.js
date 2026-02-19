@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import connectDB from "./config/db.config.js"
 import authRoutes from './routes/auth.routes.js';
 import productRoutes from './routes/product.routes.js';
+import categoryRoutes from './routes/category.routes.js';
 import orderRoutes from './routes/order.routes.js';
 dotenv.config();
 const app = express();
@@ -28,6 +29,8 @@ app.use('/api/products', productRoutes);
 //Pedidos
 app.use('/api/orders', orderRoutes);
 
+//categorias
+app.use('/api/categories', categoryRoutes);
 
 
 

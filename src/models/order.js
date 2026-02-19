@@ -24,10 +24,10 @@ const orderSchema = new mongoose.Schema({
         default: 0
     },
     status: {
-        type: String,
-        enum: ['pendiente', 'en preparacion', 'completado', 'cancelado'],
-        default: 'pendiente'
-    },
+    type: String,
+    enum: ['pendiente', 'en cocina', 'listo', 'servido'], 
+    default: 'pendiente'
+},
     createdAt: {
         type: Date,
         default: Date.now

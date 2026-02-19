@@ -29,5 +29,14 @@ router.delete('/:id', [authRequired, isAdmin], async (req, res) => {
         res.status(400).json({ message: error.message });
     }
 });
-
+// Actualizar categoría (Solo Admin)
+router.put('/:id', [authRequired, isAdmin], async (req, res) => {
+    try {
+        const category = await categoryService.updateCategory(req.params.id, req.body.name);
+        if (!category) return res.status(404).json({ message: "Categoría no encontrada" });
+        res.json(category);
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+});
 export default router;
