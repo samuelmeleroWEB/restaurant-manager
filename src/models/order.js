@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { ORDER_STATUS } from '../constants/orderStatus.js';
 
 const orderSchema = new mongoose.Schema({
     user: {
@@ -25,7 +26,7 @@ const orderSchema = new mongoose.Schema({
     },
     status: {
     type: String,
-    enum: ['pendiente', 'en cocina', 'listo', 'servido'], 
+    enum: ORDER_STATUS, 
     default: 'pendiente'
 },
     createdAt: {
