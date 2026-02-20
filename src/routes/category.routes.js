@@ -1,33 +1,12 @@
 import { Router } from 'express';
-import * as categoryService from '../services/category.service.js';
+import * as categoryController from '../controllers/category.controller.js';
 import { authRequired, isAdmin } from '../middlewares/auth.middleware.js';
 
 const router = Router();
 
-// Listar categorías (Público)
-router.get('/', async (req, res) => {
-    const categories = await categoryService.getAllCategories();
-    res.json(categories);
-});
-
-// Crear categoría (Solo Admin)
-router.post('/', [authRequired, isAdmin], async (req, res) => {
-    try {
-        const category = await categoryService.createCategory(req.body.name);
-        res.status(201).json(category);
-    } catch (error) {
-        res.status(400).json({ message: error.message });
-    }
-});
-
-// Eliminar categoría (Solo Admin)
-router.delete('/:id', [authRequired, isAdmin], async (req, res) => {
-    try {
-        await categoryService.deleteCategory(req.params.id);
-        res.json({ message: "Categoría eliminada" });
-    } catch (error) {
-        res.status(400).json({ message: error.message });
-    }
-});
+router.get('/', categoryController.getAll);
+router.post('/', [authRequired, isAdmin], categoryController.create);
+router.put('/:id', [authRequired, isAdmin], categoryController.update);
+router.delete('/:id', [authRequired, isAdmin], categoryController.remove);
 
 export default router;

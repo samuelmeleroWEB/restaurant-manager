@@ -12,3 +12,6 @@ export const getAllCategories = async () => {
 export const deleteCategory = async (id) => {
     return await Category.findByIdAndDelete(id);
 };
+export const updateCategory = async (id, name) => {
+    return await Category.findByIdAndUpdate(id, { name }, { new: true, runValidators: true });
+};
