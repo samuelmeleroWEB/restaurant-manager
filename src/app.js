@@ -6,6 +6,7 @@ import authRoutes from './routes/auth.routes.js';
 import productRoutes from './routes/product.routes.js';
 import categoryRoutes from './routes/category.routes.js';
 import orderRoutes from './routes/order.routes.js';
+import tableRoutes from './routes/table.routes.js';
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -32,6 +33,8 @@ app.use('/api/orders', orderRoutes);
 //categorias
 app.use('/api/categories', categoryRoutes);
 
+//Mesas
+app.use('/api/tables', tableRoutes);
 
 
 
