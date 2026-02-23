@@ -1,15 +1,22 @@
 import * as orderService from '../services/order.service.js';
 import Order from '../models/order.js';
+import Table from '../models/table.js'; // Necesario para liberar la mesa
 import { ORDER_STATUS } from '../constants/orderStatus.js'; 
+
 export const create = async (req, res) => {
     try {
-        const { items } = req.body;
+        const { items, table } = req.body; // Extraemos 'table' del body
 
         if (!items || items.length === 0) {
             return res.status(400).json({ message: "El pedido debe tener al menos un plato" });
         }
 
-        const order = await orderService.createOrder(req.user.id, items);
+        if (!table) {
+            return res.status(400).json({ message: "Es obligatorio asignar una mesa al pedido" });
+        }
+
+        // Pasamos req.user.id, items y table al servicio
+        const order = await orderService.createOrder(req.user.id, items, table);
         
         res.status(201).json({
             message: "Pedido generado con éxito",
@@ -24,8 +31,6 @@ export const updateStatus = async (req, res) => {
     try {
         const { status } = req.body;
 
-        // Usamos la constante para validar. Si el día de mañana cambia un estado, 
-        // solo lo cambias en el archivo de constantes y se actualiza en toda la app.
         if (!ORDER_STATUS.includes(status)) {
             return res.status(400).json({ message: "Estado no válido" });
         }
@@ -37,6 +42,11 @@ export const updateStatus = async (req, res) => {
         );
 
         if (!order) return res.status(404).json({ message: "Pedido no encontrado" });
+
+        // Lógica automática: Si el pedido se marca como 'servido', liberamos la mesa
+        if (status === 'servido') {
+            await Table.findByIdAndUpdate(order.table, { status: 'libre' });
+        }
 
         res.json(order);
     } catch (error) {
