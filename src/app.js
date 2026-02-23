@@ -13,7 +13,12 @@ const PORT = process.env.PORT || 4000;
 
 
 // MIDDLEWARES
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:5173', // La URL exacta de tu frontend (Vite)
+  credentials: true,               // Permite el envío de cookies/tokens
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 app.use(express.json());
 
 
