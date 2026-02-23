@@ -19,6 +19,11 @@ const orderSchema = new mongoose.Schema({
             min: [1, 'La cantidad mínima es 1']
         }
     }],
+    table: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Table',
+    required: [true, 'Un pedido debe estar asociado a una mesa']
+},
     total: {
         type: Number,
         required: true,

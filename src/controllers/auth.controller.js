@@ -1,5 +1,5 @@
 import * as authService from "../services/auth.service.js";
-
+import User from '../models/user.js';
 export const register = async (req, res) => {
     try {
         const newUser = await authService.registerUser(req.body);
@@ -28,5 +28,13 @@ export const login = async (req, res) => {
         res.status(error.statusCode || 500).json({ 
             message: error.message 
         });
+    }
+};
+export const getUsers = async (req, res) => {
+    try {
+        const users = await User.find({}, '-password'); // El '-password' es para no enviar las contraseñas
+        res.status(200).json(users);
+    } catch (error) {
+        res.status(500).json({ message: "Error al obtener usuarios" });
     }
 };
