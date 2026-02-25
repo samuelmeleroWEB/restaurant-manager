@@ -1,1 +1,1 @@
-export const ORDER_STATUS = ['pendiente', 'en cocina', 'listo', 'servido'];
+export const ORDER_STATUS = ['pendiente', 'cocinando', 'listo', 'servido'];

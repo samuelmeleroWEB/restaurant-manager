@@ -38,3 +38,19 @@ export const getUsers = async (req, res) => {
         res.status(500).json({ message: "Error al obtener usuarios" });
     }
 };
+export const profile = async (req, res) => {
+  try {
+    // req.user viene de tu middleware authRequired
+    res.json(req.user); 
+  } catch (error) {
+    res.status(500).json({ message: "Error al obtener el perfil" });
+  }
+};
+export const logout = async (req, res) => {
+  try {
+    // Si usaras cookies: res.clearCookie("token");
+    return res.status(200).json({ message: "Sesión cerrada correctamente" });
+  } catch (error) {
+    return res.status(500).json({ message: "Error al cerrar sesión" });
+  }
+};

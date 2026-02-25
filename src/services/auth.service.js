@@ -43,13 +43,16 @@ export const loginUser = async (email, password) => {
 
     // 3. Crear el Token
     const token = jwt.sign(
-        { id: user._id, role: user.role },
-        process.env.JWT_SECRET,
-        { expiresIn: '8h' }
-    );
+    { 
+        id: user._id, 
+        role: user.role.toLowerCase() // Lo forzamos a minúsculas para evitar errores de matching
+    },
+    process.env.JWT_SECRET,
+    { expiresIn: '8h' }
+);
 
-    return {
-        token,
-        user: { email: user.email, role: user.role }
-    };
+return {
+    token,
+    user: { id: user._id, email: user.email, role: user.role.toLowerCase() }
+};
 };
