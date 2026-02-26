@@ -53,3 +53,16 @@ export const updateStatus = async (req, res) => {
         res.status(400).json({ message: error.message });
     }
 };
+export const getAllOrders = async (req, res) => {
+  try {
+    // Buscamos todas las órdenes y traemos los datos de la mesa y los productos
+    const orders = await Order.find()
+      .populate('table') 
+      .populate('items.product')
+      .sort({ createdAt: -1 }); // Las más recientes primero
+
+    res.json(orders);
+  } catch (error) {
+    res.status(500).json({ message: "Error al obtener los pedidos" });
+  }
+};
